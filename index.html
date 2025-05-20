@@ -6,22 +6,116 @@
 -->
 <html>
 	<head>
-		<title>Dimension by HTML5 UP</title>
+		<title>Philip Green | Portfolio</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="theme-color" content="#000000" />
+		<script src="https://cdn.amplitude.com/script/f9f8280faea1c7c0bf538fa581649ffb.js"></script>
+		<script src="https://cdn.amplitude.com/script/f9f8280faea1c7c0bf538fa581649ffb.engagement.js"></script>		
+		<script>amplitude.add(window.engagement.plugin())</script>
+		<script>window.amplitude.init('f9f8280faea1c7c0bf538fa581649ffb', {
+			"fetchRemoteConfig": true, 
+			"autocapture": true, 
+			autocapture: {
+				elementInteractions: true,
+			}
+		});</script>
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-<script src="https://cdn.amplitude.com/script/f9f8280faea1c7c0bf538fa581649ffb.js"></script>
-<script src="https://cdn.amplitude.com/script/f9f8280faea1c7c0bf538fa581649ffb.engagement.js"></script>		
-<script>amplitude.add(window.engagement.plugin())</script>
-<script>window.amplitude.init('f9f8280faea1c7c0bf538fa581649ffb', {
-        "fetchRemoteConfig": true, "autocapture": true, autocapture: {
-            elementInteractions: true,
-        }
-    });</script>
+		<style>
+			:root {
+				--bg-color: #ffffff;
+				--text-color: #000000;
+				--accent-color: #4a90e2;
+			}
 
+			[data-theme="dark"] {
+				--bg-color: #1a1a1a;
+				--text-color: #ffffff;
+				--accent-color: #64b5f6;
+			}
+
+			body {
+				background-color: var(--bg-color);
+				color: var(--text-color);
+				transition: background-color 0.3s ease, color 0.3s ease;
+			}
+
+			.theme-toggle {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				z-index: 1000;
+				background: var(--accent-color);
+				border: none;
+				border-radius: 50%;
+				width: 40px;
+				height: 40px;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: transform 0.3s ease;
+			}
+
+			.theme-toggle:hover {
+				transform: scale(1.1);
+			}
+
+			.project-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2rem;
+				margin-top: 2rem;
+			}
+
+			.project-item {
+				background: rgba(255, 255, 255, 0.1);
+				padding: 1.5rem;
+				border-radius: 8px;
+				transition: transform 0.3s ease;
+			}
+
+			.project-item:hover {
+				transform: translateY(-5px);
+			}
+
+			.skills-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 2rem;
+				margin-top: 2rem;
+			}
+
+			.skill-category {
+				background: rgba(255, 255, 255, 0.1);
+				padding: 1.5rem;
+				border-radius: 8px;
+			}
+
+			.blog-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2rem;
+				margin-top: 2rem;
+			}
+
+			.blog-item {
+				background: rgba(255, 255, 255, 0.1);
+				padding: 1.5rem;
+				border-radius: 8px;
+				transition: transform 0.3s ease;
+			}
+
+			.blog-item:hover {
+				transform: translateY(-5px);
+			}
+		</style>
 	</head>
 	<body class="is-preload">
+		<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+			<span class="icon fa-moon"></span>
+		</button>
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -33,16 +127,17 @@
 						</div>
 						<div class="content">
 							<div class="inner">
-								<h1>Dimension</h1>
-								<p>A fully responsive site template designed by <a href="https://html5up.net">HTML5 UP</a> and released<br />
-								for free under the <a href="https://html5up.net/license">Creative Commons</a> license.</p>
+								<h1>Philip Green</h1>
+								<p>Software Engineer & Developer<br />
+								Building innovative solutions and creating impactful experiences</p>
 							</div>
 						</div>
 						<nav>
 							<ul>
-								<li><a href="#intro">Intro</a></li>
-								<li><a href="#work">Work</a></li>
 								<li><a href="#about">About</a></li>
+								<li><a href="#projects">Projects</a></li>
+								<li><a href="#skills">Skills</a></li>
+								<li><a href="#blog">Blog</a></li>
 								<li><a href="#contact">Contact</a></li>
 								<!--<li><a href="#elements">Elements</a></li>-->
 							</ul>
@@ -60,37 +155,123 @@
 								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
 							</article>
 
-						<!-- Work -->
-							<article id="work">
-								<h2 class="major">Work</h2>
-								<span class="image main"><img src="images/pic02.jpg" alt="" /></span>
-								<p>Adipiscing magna sed dolor elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices.</p>
-								<p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus pharetra. Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet feugiat tempus.</p>
+						<!-- Projects -->
+							<article id="projects">
+								<h2 class="major">Projects</h2>
+								<div class="project-grid">
+									<div class="project-item">
+										<h3>Project One</h3>
+										<span class="image main"><img src="images/pic02.jpg" alt="Project One" /></span>
+										<p>A full-stack web application showcasing modern development practices and responsive design. Built with React, Node.js, and MongoDB.</p>
+										<ul class="actions">
+											<li><a href="#" class="button">View Project</a></li>
+										</ul>
+									</div>
+									<div class="project-item">
+										<h3>Project Two</h3>
+										<span class="image main"><img src="images/pic01.jpg" alt="Project Two" /></span>
+										<p>An innovative mobile application that solves real-world problems. Developed using React Native and Firebase.</p>
+										<ul class="actions">
+											<li><a href="#" class="button">View Project</a></li>
+										</ul>
+									</div>
+								</div>
+							</article>
+
+						<!-- Skills -->
+							<article id="skills">
+								<h2 class="major">Skills</h2>
+								<div class="skills-grid">
+									<div class="skill-category">
+										<h3>Frontend</h3>
+										<ul>
+											<li>React.js</li>
+											<li>JavaScript/TypeScript</li>
+											<li>HTML5/CSS3</li>
+											<li>Responsive Design</li>
+										</ul>
+									</div>
+									<div class="skill-category">
+										<h3>Backend</h3>
+										<ul>
+											<li>Node.js</li>
+											<li>Python</li>
+											<li>SQL/NoSQL</li>
+											<li>RESTful APIs</li>
+										</ul>
+									</div>
+									<div class="skill-category">
+										<h3>Tools & Others</h3>
+										<ul>
+											<li>Git/GitHub</li>
+											<li>Docker</li>
+											<li>CI/CD</li>
+											<li>Agile Methodologies</li>
+										</ul>
+									</div>
+								</div>
+							</article>
+
+						<!-- Blog -->
+							<article id="blog">
+								<h2 class="major">Blog</h2>
+								<div class="blog-grid">
+									<div class="blog-item">
+										<h3>Building Modern Web Applications</h3>
+										<span class="image main"><img src="images/blog1.jpg" alt="Web Development" /></span>
+										<p>Exploring the latest trends and best practices in modern web development, from React to Next.js.</p>
+										<ul class="actions">
+											<li><a href="#" class="button">Read More</a></li>
+										</ul>
+									</div>
+									<div class="blog-item">
+										<h3>The Future of AI in Development</h3>
+										<span class="image main"><img src="images/blog2.jpg" alt="AI Development" /></span>
+										<p>How artificial intelligence is transforming the way we write and maintain code.</p>
+										<ul class="actions">
+											<li><a href="#" class="button">Read More</a></li>
+										</ul>
+									</div>
+									<div class="blog-item">
+										<h3>Optimizing Performance</h3>
+										<span class="image main"><img src="images/blog3.jpg" alt="Performance" /></span>
+										<p>Tips and tricks for improving your application's performance and user experience.</p>
+										<ul class="actions">
+											<li><a href="#" class="button">Read More</a></li>
+										</ul>
+									</div>
+								</div>
 							</article>
 
 						<!-- About -->
 							<article id="about">
-								<h2 class="major">About</h2>
-								<span class="image main"><img src="images/pic03.jpg" alt="" /></span>
-								<p>Lorem ipsum dolor sit amet, consectetur et adipiscing elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices. Aliquam libero et malesuada fames ac ante ipsum primis in faucibus. Cras viverra ligula sit amet ex mollis mattis lorem ipsum dolor sit amet.</p>
+								<h2 class="major">About Me</h2>
+								<span class="image main"><img src="images/pic03.jpg" alt="Profile Image" /></span>
+								<p>I'm a passionate software engineer with a focus on creating elegant, efficient, and user-friendly solutions. With expertise in modern web technologies and a strong foundation in software development principles, I strive to build applications that make a real impact.</p>
+								<p>My journey in technology has equipped me with a diverse skill set and a problem-solving mindset. I'm constantly learning and adapting to new technologies while maintaining a strong focus on writing clean, maintainable code.</p>
 							</article>
 
 						<!-- Contact -->
 							<article id="contact">
 								<h2 class="major">Contact</h2>
-								<form method="post" action="#">
+								<p>Feel free to reach out to me through the form below or connect with me on social media.</p>
+								<form method="post" action="#" id="contactForm">
 									<div class="fields">
 										<div class="field half">
 											<label for="name">Name</label>
-											<input type="text" name="name" id="name" />
+											<input type="text" name="name" id="name" required />
 										</div>
 										<div class="field half">
 											<label for="email">Email</label>
-											<input type="text" name="email" id="email" />
+											<input type="email" name="email" id="email" required />
+										</div>
+										<div class="field">
+											<label for="subject">Subject</label>
+											<input type="text" name="subject" id="subject" required />
 										</div>
 										<div class="field">
 											<label for="message">Message</label>
-											<textarea name="message" id="message" rows="4"></textarea>
+											<textarea name="message" id="message" rows="4" required></textarea>
 										</div>
 									</div>
 									<ul class="actions">
@@ -98,12 +279,15 @@
 										<li><input type="reset" value="Reset" /></li>
 									</ul>
 								</form>
-								<ul class="icons">
-									<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
-								</ul>
+								<div class="social-links">
+									<h3>Connect with me</h3>
+									<ul class="icons">
+										<li><a href="https://github.com/pmgreen8719" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+										<li><a href="https://linkedin.com/in/your-profile" class="icon brands fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+										<li><a href="https://twitter.com/your-handle" class="icon brands fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+										<li><a href="mailto:your.email@example.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+									</ul>
+								</div>
 							</article>
 
 						<!-- Elements -->
@@ -352,7 +536,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 
 				<!-- Footer -->
 					<footer id="footer">
-						<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+						<p class="copyright">&copy; 2024 Philip Green. All rights reserved.</p>
 					</footer>
 
 			</div>
@@ -366,6 +550,67 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script>
+				// Dark mode toggle
+				const themeToggle = document.getElementById('themeToggle');
+				const icon = themeToggle.querySelector('.icon');
+				
+				// Check for saved theme preference
+				const savedTheme = localStorage.getItem('theme');
+				if (savedTheme === 'dark') {
+					document.documentElement.setAttribute('data-theme', 'dark');
+					icon.classList.replace('fa-moon', 'fa-sun');
+				}
 
+				themeToggle.addEventListener('click', () => {
+					const currentTheme = document.documentElement.getAttribute('data-theme');
+					const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+					
+					document.documentElement.setAttribute('data-theme', newTheme);
+					localStorage.setItem('theme', newTheme);
+					
+					if (newTheme === 'dark') {
+						icon.classList.replace('fa-moon', 'fa-sun');
+					} else {
+						icon.classList.replace('fa-sun', 'fa-moon');
+					}
+				});
+
+				// Smooth scroll for navigation
+				document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+					anchor.addEventListener('click', function (e) {
+						e.preventDefault();
+						document.querySelector(this.getAttribute('href')).scrollIntoView({
+							behavior: 'smooth'
+						});
+					});
+				});
+
+				// Form validation and submission
+				const contactForm = document.getElementById('contactForm');
+				contactForm.addEventListener('submit', function(e) {
+					e.preventDefault();
+					// Add your form submission logic here
+					alert('Thank you for your message! I will get back to you soon.');
+					contactForm.reset();
+				});
+
+				// Add animation classes when elements come into view
+				const observerOptions = {
+					threshold: 0.1
+				};
+
+				const observer = new IntersectionObserver((entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							entry.target.classList.add('animate');
+						}
+					});
+				}, observerOptions);
+
+				document.querySelectorAll('.project-item, .blog-item, .skill-category').forEach((el) => {
+					observer.observe(el);
+				});
+			</script>
 	</body>
 </html>
