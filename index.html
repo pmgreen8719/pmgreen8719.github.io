@@ -1,616 +1,647 @@
-<!DOCTYPE HTML>
-<!--
-	Dimension by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Philip Green | Portfolio</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta name="theme-color" content="#000000" />
-		<script src="https://cdn.amplitude.com/script/f9f8280faea1c7c0bf538fa581649ffb.js"></script>
-		<script src="https://cdn.amplitude.com/script/f9f8280faea1c7c0bf538fa581649ffb.engagement.js"></script>		
-		<script>amplitude.add(window.engagement.plugin())</script>
-		<script>window.amplitude.init('f9f8280faea1c7c0bf538fa581649ffb', {
-			"fetchRemoteConfig": true, 
-			"autocapture": true, 
-			autocapture: {
-				elementInteractions: true,
-			}
-		});</script>
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<style>
-			:root {
-				--bg-color: #ffffff;
-				--text-color: #000000;
-				--accent-color: #4a90e2;
-			}
+import React, { useMemo, useState, useContext, createContext } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { ShoppingCart, Star, Sparkles, Menu, ArrowRight, X, Minus, Plus, Trash2, CreditCard } from "lucide-react";
 
-			[data-theme="dark"] {
-				--bg-color: #1a1a1a;
-				--text-color: #ffffff;
-				--accent-color: #64b5f6;
-			}
+// --------------------------------------------------
+// Demo Data (add more to taste)
+// --------------------------------------------------
+const PRODUCTS = [
+  {
+    id: 1,
+    name: "Vintage Leather Backpack",
+    priceText: "£129",
+    price: 129,
+    img: "https://images.unsplash.com/photo-1518544889289-1e1c1f60bf4e?w=1200&auto=format&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1518544889289-1e1c1f60bf4e?w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1547949003-9792a18a2601?w=1200&auto=format&fit=crop",
+    ],
+    desc: "A handcrafted backpack made from premium full-grain leather, designed for durability and timeless style.",
+  },
+  {
+    id: 2,
+    name: "Classic Sneakers",
+    priceText: "£89",
+    price: 89,
+    img: "https://images.unsplash.com/photo-1528701800489-20be9c1e3c56?w=1200&auto=format&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1528701800489-20be9c1e3c56?w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&auto=format&fit=crop",
+    ],
+    desc: "Minimalist everyday trainers with a cushioned sole and breathable mesh upper.",
+  },
+  {
+    id: 3,
+    name: "Handmade Ceramic Mug",
+    priceText: "£25",
+    price: 25,
+    img: "https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?w=1200&auto=format&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1524594227084-1f06586fdc37?w=1200&auto=format&fit=crop",
+    ],
+    desc: "Each mug is wheel-thrown and glazed by hand. No two are identical.",
+  },
+  {
+    id: 4,
+    name: "Wool Knit Sweater",
+    priceText: "£75",
+    price: 75,
+    img: "https://images.unsplash.com/photo-1602810318383-e445606f2240?w=1200&auto=format&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1602810318383-e445606f2240?w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1539533113208-f6df8cc0f3f2?w=1200&auto=format&fit=crop",
+    ],
+    desc: "Cozy, soft, and breathable — made from 100% organic wool.",
+  },
+  {
+    id: 5,
+    name: "Modern Desk Lamp",
+    priceText: "£55",
+    price: 55,
+    img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1200&auto=format&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1493666438817-866a91353ca9?w=1200&auto=format&fit=crop",
+    ],
+    desc: "Sleek, energy‑efficient lamp with adjustable brightness and a warm glow.",
+  },
+  {
+    id: 6,
+    name: "Minimalist Chair",
+    priceText: "£220",
+    price: 220,
+    img: "https://images.unsplash.com/photo-1616627986882-0cb5f9e3a908?w=1200&auto=format&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1616627986882-0cb5f9e3a908?w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&auto=format&fit=crop",
+    ],
+    desc: "A modern, ergonomic silhouette inspired by Scandinavian design.",
+  },
+];
 
-			body {
-				background-color: var(--bg-color);
-				color: var(--text-color);
-				transition: background-color 0.3s ease, color 0.3s ease;
-			}
-
-			.theme-toggle {
-				position: fixed;
-				top: 20px;
-				right: 20px;
-				z-index: 1000;
-				background: var(--accent-color);
-				border: none;
-				border-radius: 50%;
-				width: 40px;
-				height: 40px;
-				cursor: pointer;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				transition: transform 0.3s ease;
-			}
-
-			.theme-toggle:hover {
-				transform: scale(1.1);
-			}
-
-			.project-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-				gap: 2rem;
-				margin-top: 2rem;
-			}
-
-			.project-item {
-				background: rgba(255, 255, 255, 0.1);
-				padding: 1.5rem;
-				border-radius: 8px;
-				transition: transform 0.3s ease;
-			}
-
-			.project-item:hover {
-				transform: translateY(-5px);
-			}
-
-			.skills-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-				gap: 2rem;
-				margin-top: 2rem;
-			}
-
-			.skill-category {
-				background: rgba(255, 255, 255, 0.1);
-				padding: 1.5rem;
-				border-radius: 8px;
-			}
-
-			.blog-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-				gap: 2rem;
-				margin-top: 2rem;
-			}
-
-			.blog-item {
-				background: rgba(255, 255, 255, 0.1);
-				padding: 1.5rem;
-				border-radius: 8px;
-				transition: transform 0.3s ease;
-			}
-
-			.blog-item:hover {
-				transform: translateY(-5px);
-			}
-		</style>
-	</head>
-	<body class="is-preload">
-		<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-			<span class="icon fa-moon"></span>
-		</button>
-
-		<!-- Wrapper -->
-			<div id="wrapper">
-
-				<!-- Header -->
-					<header id="header">
-						<div class="logo">
-							<span class="icon fa-gem"></span>
-						</div>
-						<div class="content">
-							<div class="inner">
-								<h1>Philip Green</h1>
-								<p>Software Engineer & Developer<br />
-								Building innovative solutions and creating impactful experiences</p>
-							</div>
-						</div>
-						<nav>
-							<ul>
-								<li><a href="#about">About</a></li>
-								<li><a href="#projects">Projects</a></li>
-								<li><a href="#skills">Skills</a></li>
-								<li><a href="#blog">Blog</a></li>
-								<li><a href="#contact">Contact</a></li>
-								<!--<li><a href="#elements">Elements</a></li>-->
-							</ul>
-						</nav>
-					</header>
-
-				<!-- Main -->
-					<div id="main">
-
-						<!-- Intro -->
-							<article id="intro">
-								<h2 class="major">Intro</h2>
-								<span class="image main"><img src="images/pic01.jpg" alt="" /></span>
-								<p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. By the way, check out my <a href="#work">awesome work</a>.</p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
-							</article>
-
-						<!-- Projects -->
-							<article id="projects">
-								<h2 class="major">Projects</h2>
-								<div class="project-grid">
-									<div class="project-item">
-										<h3>Project One</h3>
-										<span class="image main"><img src="images/pic02.jpg" alt="Project One" /></span>
-										<p>A full-stack web application showcasing modern development practices and responsive design. Built with React, Node.js, and MongoDB.</p>
-										<ul class="actions">
-											<li><a href="#" class="button">View Project</a></li>
-										</ul>
-									</div>
-									<div class="project-item">
-										<h3>Project Two</h3>
-										<span class="image main"><img src="images/pic01.jpg" alt="Project Two" /></span>
-										<p>An innovative mobile application that solves real-world problems. Developed using React Native and Firebase.</p>
-										<ul class="actions">
-											<li><a href="#" class="button">View Project</a></li>
-										</ul>
-									</div>
-								</div>
-							</article>
-
-						<!-- Skills -->
-							<article id="skills">
-								<h2 class="major">Skills</h2>
-								<div class="skills-grid">
-									<div class="skill-category">
-										<h3>Frontend</h3>
-										<ul>
-											<li>React.js</li>
-											<li>JavaScript/TypeScript</li>
-											<li>HTML5/CSS3</li>
-											<li>Responsive Design</li>
-										</ul>
-									</div>
-									<div class="skill-category">
-										<h3>Backend</h3>
-										<ul>
-											<li>Node.js</li>
-											<li>Python</li>
-											<li>SQL/NoSQL</li>
-											<li>RESTful APIs</li>
-										</ul>
-									</div>
-									<div class="skill-category">
-										<h3>Tools & Others</h3>
-										<ul>
-											<li>Git/GitHub</li>
-											<li>Docker</li>
-											<li>CI/CD</li>
-											<li>Agile Methodologies</li>
-										</ul>
-									</div>
-								</div>
-							</article>
-
-						<!-- Blog -->
-							<article id="blog">
-								<h2 class="major">Blog</h2>
-								<div class="blog-grid">
-									<div class="blog-item">
-										<h3>Building Modern Web Applications</h3>
-										<span class="image main"><img src="images/blog1.jpg" alt="Web Development" /></span>
-										<p>Exploring the latest trends and best practices in modern web development, from React to Next.js.</p>
-										<ul class="actions">
-											<li><a href="#" class="button">Read More</a></li>
-										</ul>
-									</div>
-									<div class="blog-item">
-										<h3>The Future of AI in Development</h3>
-										<span class="image main"><img src="images/blog2.jpg" alt="AI Development" /></span>
-										<p>How artificial intelligence is transforming the way we write and maintain code.</p>
-										<ul class="actions">
-											<li><a href="#" class="button">Read More</a></li>
-										</ul>
-									</div>
-									<div class="blog-item">
-										<h3>Optimizing Performance</h3>
-										<span class="image main"><img src="images/blog3.jpg" alt="Performance" /></span>
-										<p>Tips and tricks for improving your application's performance and user experience.</p>
-										<ul class="actions">
-											<li><a href="#" class="button">Read More</a></li>
-										</ul>
-									</div>
-								</div>
-							</article>
-
-						<!-- About -->
-							<article id="about">
-								<h2 class="major">About Me</h2>
-								<span class="image main"><img src="images/pic03.jpg" alt="Profile Image" /></span>
-								<p>I'm a passionate software engineer with a focus on creating elegant, efficient, and user-friendly solutions. With expertise in modern web technologies and a strong foundation in software development principles, I strive to build applications that make a real impact.</p>
-								<p>My journey in technology has equipped me with a diverse skill set and a problem-solving mindset. I'm constantly learning and adapting to new technologies while maintaining a strong focus on writing clean, maintainable code.</p>
-							</article>
-
-						<!-- Contact -->
-							<article id="contact">
-								<h2 class="major">Contact</h2>
-								<p>Feel free to reach out to me through the form below or connect with me on social media.</p>
-								<form method="post" action="#" id="contactForm">
-									<div class="fields">
-										<div class="field half">
-											<label for="name">Name</label>
-											<input type="text" name="name" id="name" required />
-										</div>
-										<div class="field half">
-											<label for="email">Email</label>
-											<input type="email" name="email" id="email" required />
-										</div>
-										<div class="field">
-											<label for="subject">Subject</label>
-											<input type="text" name="subject" id="subject" required />
-										</div>
-										<div class="field">
-											<label for="message">Message</label>
-											<textarea name="message" id="message" rows="4" required></textarea>
-										</div>
-									</div>
-									<ul class="actions">
-										<li><input type="submit" value="Send Message" class="primary" /></li>
-										<li><input type="reset" value="Reset" /></li>
-									</ul>
-								</form>
-								<div class="social-links">
-									<h3>Connect with me</h3>
-									<ul class="icons">
-										<li><a href="https://github.com/pmgreen8719" class="icon brands fa-github" target="_blank"><span class="label">GitHub</span></a></li>
-										<li><a href="https://linkedin.com/in/your-profile" class="icon brands fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
-										<li><a href="https://twitter.com/your-handle" class="icon brands fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
-										<li><a href="mailto:your.email@example.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-									</ul>
-								</div>
-							</article>
-
-						<!-- Elements -->
-							<article id="elements">
-								<h2 class="major">Elements</h2>
-
-								<section>
-									<h3 class="major">Text</h3>
-									<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
-									This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
-									This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
-									<hr />
-									<h2>Heading Level 2</h2>
-									<h3>Heading Level 3</h3>
-									<h4>Heading Level 4</h4>
-									<h5>Heading Level 5</h5>
-									<h6>Heading Level 6</h6>
-									<hr />
-									<h4>Blockquote</h4>
-									<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
-									<h4>Preformatted</h4>
-									<pre><code>i = 0;
-
-while (!deck.isInOrder()) {
-    print 'Iteration ' + i;
-    deck.shuffle();
-    i++;
+// --------------------------------------------------
+// Cart Context (global state)
+// --------------------------------------------------
+const CartContext = createContext(null);
+function useCart() {
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCart must be used within CartProvider");
+  return ctx;
 }
 
-print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
-								</section>
+function CartProvider({ children }) {
+  const [items, setItems] = useState([]); // {id, name, img, price, priceText, qty}
 
-								<section>
-									<h3 class="major">Lists</h3>
+  const add = (product, qty = 1) => {
+    setItems((prev) => {
+      const exists = prev.find((i) => i.id === product.id);
+      if (exists) {
+        return prev.map((i) => (i.id === product.id ? { ...i, qty: i.qty + qty } : i));
+      }
+      return [
+        ...prev,
+        { id: product.id, name: product.name, img: product.img, price: product.price, priceText: product.priceText, qty },
+      ];
+    });
+  };
+  const remove = (id) => setItems((prev) => prev.filter((i) => i.id !== id));
+  const inc = (id) => setItems((p) => p.map((i) => (i.id === id ? { ...i, qty: i.qty + 1 } : i)));
+  const dec = (id) => setItems((p) => p.map((i) => (i.id === id ? { ...i, qty: Math.max(1, i.qty - 1) } : i)));
+  const clear = () => setItems([]);
 
-									<h4>Unordered</h4>
-									<ul>
-										<li>Dolor pulvinar etiam.</li>
-										<li>Sagittis adipiscing.</li>
-										<li>Felis enim feugiat.</li>
-									</ul>
+  const subtotal = useMemo(() => items.reduce((s, i) => s + i.price * i.qty, 0), [items]);
+  const count = useMemo(() => items.reduce((s, i) => s + i.qty, 0), [items]);
 
-									<h4>Alternate</h4>
-									<ul class="alt">
-										<li>Dolor pulvinar etiam.</li>
-										<li>Sagittis adipiscing.</li>
-										<li>Felis enim feugiat.</li>
-									</ul>
+  const value = { items, add, remove, inc, dec, clear, subtotal, count };
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+}
 
-									<h4>Ordered</h4>
-									<ol>
-										<li>Dolor pulvinar etiam.</li>
-										<li>Etiam vel felis viverra.</li>
-										<li>Felis enim feugiat.</li>
-										<li>Dolor pulvinar etiam.</li>
-										<li>Etiam vel felis lorem.</li>
-										<li>Felis enim et feugiat.</li>
-									</ol>
-									<h4>Icons</h4>
-									<ul class="icons">
-										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-										<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-									</ul>
+// --------------------------------------------------
+// UI — Shell & Nav
+// --------------------------------------------------
+function Nav({ onOpenCart, go }) {
+  const { count } = useCart();
+  return (
+    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+        <button onClick={() => go("home")} className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5" aria-hidden />
+          <span className="font-semibold">DemoShop</span>
+        </button>
+        <nav className="hidden gap-6 text-sm md:flex">
+          <button onClick={() => go("home")} className="opacity-80 hover:opacity-100">Home</button>
+          <a href="#products" className="opacity-80 hover:opacity-100">Products</a>
+          <button onClick={() => go("checkout")} className="opacity-80 hover:opacity-100">Checkout</button>
+        </nav>
+        <Button onClick={onOpenCart} className="inline-flex gap-2" size="sm">
+          <ShoppingCart className="h-4 w-4" /> Cart ({count})
+        </Button>
+      </div>
+    </header>
+  );
+}
 
-									<h4>Actions</h4>
-									<ul class="actions">
-										<li><a href="#" class="button primary">Default</a></li>
-										<li><a href="#" class="button">Default</a></li>
-									</ul>
-									<ul class="actions stacked">
-										<li><a href="#" class="button primary">Default</a></li>
-										<li><a href="#" class="button">Default</a></li>
-									</ul>
-								</section>
+function Hero() {
+  return (
+    <section id="home" className="relative overflow-hidden bg-[radial-gradient(ellipse_at_top,theme(colors.pink.500/15),transparent_60%)]">
+      <div className="mx-auto max-w-7xl px-4 py-24 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-5xl font-extrabold tracking-tight md:text-6xl"
+        >
+          Make It Pop ✨ Shop the Demo
+        </motion.h1>
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+          A flashy, modern e‑commerce template with buttery animations, bold visuals, and a fully interactive cart & checkout.
+        </p>
+        <div className="mt-8 flex justify-center gap-4">
+          <a href="#products">
+            <Button size="lg" className="gap-2">
+              Shop Now <ArrowRight className="h-4 w-4" />
+            </Button>
+          </a>
+          <Button size="lg" variant="outline">
+            Learn More
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-								<section>
-									<h3 class="major">Table</h3>
-									<h4>Default</h4>
-									<div class="table-wrapper">
-										<table>
-											<thead>
-												<tr>
-													<th>Name</th>
-													<th>Description</th>
-													<th>Price</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>Item One</td>
-													<td>Ante turpis integer aliquet porttitor.</td>
-													<td>29.99</td>
-												</tr>
-												<tr>
-													<td>Item Two</td>
-													<td>Vis ac commodo adipiscing arcu aliquet.</td>
-													<td>19.99</td>
-												</tr>
-												<tr>
-													<td>Item Three</td>
-													<td> Morbi faucibus arcu accumsan lorem.</td>
-													<td>29.99</td>
-												</tr>
-												<tr>
-													<td>Item Four</td>
-													<td>Vitae integer tempus condimentum.</td>
-													<td>19.99</td>
-												</tr>
-												<tr>
-													<td>Item Five</td>
-													<td>Ante turpis integer aliquet porttitor.</td>
-													<td>29.99</td>
-												</tr>
-											</tbody>
-											<tfoot>
-												<tr>
-													<td colspan="2"></td>
-													<td>100.00</td>
-												</tr>
-											</tfoot>
-										</table>
-									</div>
+// --------------------------------------------------
+// Product Listing & Details
+// --------------------------------------------------
+function ProductDetailModal({ product, onClose, onAdd }) {
+  const [imgIdx, setImgIdx] = useState(0);
+  return (
+    <AnimatePresence>
+      {product && (
+        <motion.div
+          key={product.id}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur"
+        >
+          <motion.div
+            initial={{ scale: 0.9, y: 20, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.9, y: 20, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative max-w-5xl rounded-3xl bg-background p-6 shadow-2xl"
+          >
+            <button onClick={onClose} className="absolute right-4 top-4 rounded-full bg-muted p-2 hover:bg-muted/70">
+              <X className="h-5 w-5" />
+            </button>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+                  <img src={product.gallery?.[imgIdx] || product.img} alt={product.name} className="h-full w-full object-cover" />
+                </div>
+                <div className="mt-3 grid grid-cols-4 gap-2">
+                  {(product.gallery || [product.img]).map((g, i) => (
+                    <button key={i} onClick={() => setImgIdx(i)} className={`overflow-hidden rounded-xl border ${i === imgIdx ? "ring-2" : ""}`}>
+                      <img src={g} alt={`${product.name} ${i + 1}`} className="h-16 w-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">{product.name}</h2>
+                <div className="mt-2 flex items-center gap-2 text-yellow-500">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`h-4 w-4 ${i < 4 ? "fill-current" : ""}`} />
+                  ))}
+                  <span className="text-sm text-muted-foreground">(124 reviews)</span>
+                </div>
+                <p className="mt-3 text-muted-foreground">{product.desc}</p>
+                <p className="mt-4 text-3xl font-extrabold">{product.priceText}</p>
+                <div className="mt-6 flex gap-3">
+                  <Button onClick={() => onAdd(product)} className="gap-2">
+                    <ShoppingCart className="h-4 w-4" /> Add to Cart
+                  </Button>
+                  <Button variant="outline">Wishlist</Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
 
-									<h4>Alternate</h4>
-									<div class="table-wrapper">
-										<table class="alt">
-											<thead>
-												<tr>
-													<th>Name</th>
-													<th>Description</th>
-													<th>Price</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>Item One</td>
-													<td>Ante turpis integer aliquet porttitor.</td>
-													<td>29.99</td>
-												</tr>
-												<tr>
-													<td>Item Two</td>
-													<td>Vis ac commodo adipiscing arcu aliquet.</td>
-													<td>19.99</td>
-												</tr>
-												<tr>
-													<td>Item Three</td>
-													<td> Morbi faucibus arcu accumsan lorem.</td>
-													<td>29.99</td>
-												</tr>
-												<tr>
-													<td>Item Four</td>
-													<td>Vitae integer tempus condimentum.</td>
-													<td>19.99</td>
-												</tr>
-												<tr>
-													<td>Item Five</td>
-													<td>Ante turpis integer aliquet porttitor.</td>
-													<td>29.99</td>
-												</tr>
-											</tbody>
-											<tfoot>
-												<tr>
-													<td colspan="2"></td>
-													<td>100.00</td>
-												</tr>
-											</tfoot>
-										</table>
-									</div>
-								</section>
+function Products() {
+  const { add } = useCart();
+  const [selected, setSelected] = useState(null);
 
-								<section>
-									<h3 class="major">Buttons</h3>
-									<ul class="actions">
-										<li><a href="#" class="button primary">Primary</a></li>
-										<li><a href="#" class="button">Default</a></li>
-									</ul>
-									<ul class="actions">
-										<li><a href="#" class="button">Default</a></li>
-										<li><a href="#" class="button small">Small</a></li>
-									</ul>
-									<ul class="actions">
-										<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
-										<li><a href="#" class="button icon solid fa-download">Icon</a></li>
-									</ul>
-									<ul class="actions">
-										<li><span class="button primary disabled">Disabled</span></li>
-										<li><span class="button disabled">Disabled</span></li>
-									</ul>
-								</section>
+  return (
+    <section id="products" className="mx-auto max-w-7xl px-4 py-16">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Featured Products</h2>
+        <p className="mt-3 text-muted-foreground">Click any product to see details. Add to cart from the modal or the card.</p>
+      </div>
+      <div className="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {PRODUCTS.map((p, i) => (
+          <motion.div
+            key={p.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+          >
+            <Card className="group overflow-hidden rounded-2xl shadow-lg transition-transform hover:scale-[1.02]">
+              <button onClick={() => setSelected(p)} className="relative block w-full">
+                <div className="relative aspect-square w-full overflow-hidden">
+                  <img src={p.img} alt={p.name} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                </div>
+              </button>
+              <CardHeader>
+                <CardTitle className="text-lg">{p.name}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex items-center justify-between">
+                <span className="font-semibold">{p.priceText}</span>
+                <Button size="sm" className="gap-2" onClick={() => add(p)}>
+                  <ShoppingCart className="h-4 w-4" /> Add
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+      <ProductDetailModal product={selected} onClose={() => setSelected(null)} onAdd={(p) => { add(p); setSelected(null); }} />
+    </section>
+  );
+}
 
-								<section>
-									<h3 class="major">Form</h3>
-									<form method="post" action="#">
-										<div class="fields">
-											<div class="field half">
-												<label for="demo-name">Name</label>
-												<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
-											</div>
-											<div class="field half">
-												<label for="demo-email">Email</label>
-												<input type="email" name="demo-email" id="demo-email" value="" placeholder="jane@untitled.tld" />
-											</div>
-											<div class="field">
-												<label for="demo-category">Category</label>
-												<select name="demo-category" id="demo-category">
-													<option value="">-</option>
-													<option value="1">Manufacturing</option>
-													<option value="1">Shipping</option>
-													<option value="1">Administration</option>
-													<option value="1">Human Resources</option>
-												</select>
-											</div>
-											<div class="field half">
-												<input type="radio" id="demo-priority-low" name="demo-priority" checked>
-												<label for="demo-priority-low">Low</label>
-											</div>
-											<div class="field half">
-												<input type="radio" id="demo-priority-high" name="demo-priority">
-												<label for="demo-priority-high">High</label>
-											</div>
-											<div class="field half">
-												<input type="checkbox" id="demo-copy" name="demo-copy">
-												<label for="demo-copy">Email me a copy</label>
-											</div>
-											<div class="field half">
-												<input type="checkbox" id="demo-human" name="demo-human" checked>
-												<label for="demo-human">Not a robot</label>
-											</div>
-											<div class="field">
-												<label for="demo-message">Message</label>
-												<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
-											</div>
-										</div>
-										<ul class="actions">
-											<li><input type="submit" value="Send Message" class="primary" /></li>
-											<li><input type="reset" value="Reset" /></li>
-										</ul>
-									</form>
-								</section>
+// --------------------------------------------------
+// Mini Cart Drawer
+// --------------------------------------------------
+function MiniCart({ open, onClose, go }) {
+  const { items, inc, dec, remove, subtotal } = useCart();
+  return (
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black"
+            onClick={onClose}
+          />
+          <motion.aside
+            key="drawer"
+            initial={{ x: 400 }}
+            animate={{ x: 0 }}
+            exit={{ x: 400 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed right-0 top-0 z-50 h-full w-full max-w-md overflow-y-auto border-l bg-background p-6 shadow-2xl"
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-xl font-bold">Your Cart</h3>
+              <Button size="icon" variant="ghost" onClick={onClose} aria-label="Close">
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="space-y-4">
+              {items.length === 0 && (
+                <p className="text-muted-foreground">Your cart is empty. Start adding some goodies!</p>
+              )}
+              {items.map((i) => (
+                <Card key={i.id} className="overflow-hidden">
+                  <CardContent className="flex gap-3 p-3">
+                    <img src={i.img} alt={i.name} className="h-20 w-20 rounded-xl object-cover" />
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="font-medium leading-tight">{i.name}</div>
+                          <div className="text-sm text-muted-foreground">{i.priceText}</div>
+                        </div>
+                        <Button size="icon" variant="ghost" onClick={() => remove(i.id)} aria-label="Remove">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="mt-2 inline-flex items-center gap-2 rounded-full border px-2 py-1">
+                        <button onClick={() => dec(i.id)} aria-label="Decrease"><Minus className="h-4 w-4" /></button>
+                        <span className="min-w-[2ch] text-center text-sm">{i.qty}</span>
+                        <button onClick={() => inc(i.id)} aria-label="Increase"><Plus className="h-4 w-4" /></button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            <Separator className="my-4" />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Subtotal</span>
+              <span className="text-xl font-extrabold">£{subtotal.toFixed(2)}</span>
+            </div>
+            <Button className="mt-4 w-full gap-2" onClick={() => { onClose(); go("cart"); }}>
+              View Cart <ShoppingCart className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" className="mt-2 w-full gap-2" onClick={() => { onClose(); go("checkout"); }}>
+              Checkout <CreditCard className="h-4 w-4" />
+            </Button>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
 
-							</article>
+// --------------------------------------------------
+// Cart Page
+// --------------------------------------------------
+function CartPage({ go }) {
+  const { items, inc, dec, remove, subtotal } = useCart();
+  return (
+    <section className="mx-auto max-w-6xl px-4 py-12">
+      <h2 className="text-3xl font-bold tracking-tight">Your Cart</h2>
+      {items.length === 0 ? (
+        <div className="mt-6">
+          <p className="text-muted-foreground">Your cart is empty. Add some products to continue.</p>
+          <Button className="mt-4" onClick={() => go("home")}>Back to shopping</Button>
+        </div>
+      ) : (
+        <div className="mt-8 grid gap-8 md:grid-cols-3">
+          <div className="md:col-span-2 space-y-4">
+            {items.map((i) => (
+              <Card key={i.id}>
+                <CardContent className="flex items-center gap-4 p-4">
+                  <img src={i.img} alt={i.name} className="h-24 w-24 rounded-xl object-cover" />
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="font-medium">{i.name}</div>
+                        <div className="text-sm text-muted-foreground">{i.priceText}</div>
+                      </div>
+                      <Button size="icon" variant="ghost" onClick={() => remove(i.id)} aria-label="Remove">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <div className="mt-2 inline-flex items-center gap-2 rounded-full border px-2 py-1">
+                      <button onClick={() => dec(i.id)} aria-label="Decrease"><Minus className="h-4 w-4" /></button>
+                      <span className="min-w-[2ch] text-center text-sm">{i.qty}</span>
+                      <button onClick={() => inc(i.id)} aria-label="Increase"><Plus className="h-4 w-4" /></button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div>
+            <Card className="sticky top-24">
+              <CardHeader>
+                <CardTitle>Order Summary</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between text-sm">
+                  <span>Subtotal</span>
+                  <span>£{subtotal.toFixed(2)}</span>
+                </div>
+                <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
+                  <span>Shipping</span>
+                  <span>Calculated at checkout</span>
+                </div>
+                <Separator className="my-4" />
+                <Button className="w-full" onClick={() => go("checkout")}>Checkout</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
 
-					</div>
+// --------------------------------------------------
+// Checkout (playful/flashy)
+// --------------------------------------------------
+function CheckoutPage({ go }) {
+  const { items, subtotal, clear } = useCart();
+  const [step, setStep] = useState(1);
+  const [shipping, setShipping] = useState({ name: "", email: "", address: "", city: "", postcode: "" });
+  const [payment, setPayment] = useState({ card: "", name: "", exp: "", cvc: "" });
 
-				<!-- Footer -->
-					<footer id="footer">
-						<p class="copyright">&copy; 2024 Philip Green. All rights reserved.</p>
-					</footer>
+  const validShipping = shipping.name && shipping.email && shipping.address && shipping.city && shipping.postcode;
+  const validPayment = payment.card && payment.name && payment.exp && payment.cvc;
 
-			</div>
+  const total = subtotal + (subtotal > 0 ? 5 : 0); // flat demo shipping
 
-		<!-- BG -->
-			<div id="bg"></div>
+  return (
+    <section className="mx-auto max-w-5xl px-4 py-12">
+      <div className="mb-8 text-center">
+        <h2 className="text-3xl font-extrabold tracking-tight">Checkout</h2>
+        <p className="text-muted-foreground">Playful, colorful, and quick — this is a demo flow.</p>
+        <div className="mx-auto mt-4 flex max-w-md items-center justify-between rounded-full border p-2">
+          {[
+            { n: 1, label: "Shipping" },
+            { n: 2, label: "Payment" },
+            { n: 3, label: "Review" },
+          ].map((s) => (
+            <button
+              key={s.n}
+              onClick={() => setStep(s.n)}
+              className={`rounded-full px-4 py-2 text-sm ${step === s.n ? "bg-primary text-primary-foreground" : "opacity-70"}`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<script>
-				// Dark mode toggle
-				const themeToggle = document.getElementById('themeToggle');
-				const icon = themeToggle.querySelector('.icon');
-				
-				// Check for saved theme preference
-				const savedTheme = localStorage.getItem('theme');
-				if (savedTheme === 'dark') {
-					document.documentElement.setAttribute('data-theme', 'dark');
-					icon.classList.replace('fa-moon', 'fa-sun');
-				}
+      <div className="grid gap-8 md:grid-cols-3">
+        <div className="md:col-span-2 space-y-6">
+          {step === 1 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Shipping Info</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Input placeholder="Full name" value={shipping.name} onChange={(e) => setShipping({ ...shipping, name: e.target.value })} />
+                <Input placeholder="Email" value={shipping.email} onChange={(e) => setShipping({ ...shipping, email: e.target.value })} />
+                <Input placeholder="Address" value={shipping.address} onChange={(e) => setShipping({ ...shipping, address: e.target.value })} />
+                <div className="grid grid-cols-2 gap-3">
+                  <Input placeholder="City" value={shipping.city} onChange={(e) => setShipping({ ...shipping, city: e.target.value })} />
+                  <Input placeholder="Postcode" value={shipping.postcode} onChange={(e) => setShipping({ ...shipping, postcode: e.target.value })} />
+                </div>
+                <Button className="mt-2" onClick={() => setStep(2)} disabled={!validShipping}>Continue to Payment</Button>
+              </CardContent>
+            </Card>
+          )}
 
-				themeToggle.addEventListener('click', () => {
-					const currentTheme = document.documentElement.getAttribute('data-theme');
-					const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-					
-					document.documentElement.setAttribute('data-theme', newTheme);
-					localStorage.setItem('theme', newTheme);
-					
-					if (newTheme === 'dark') {
-						icon.classList.replace('fa-moon', 'fa-sun');
-					} else {
-						icon.classList.replace('fa-sun', 'fa-moon');
-					}
-				});
+          {step === 2 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Payment</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Input placeholder="Card number" value={payment.card} onChange={(e) => setPayment({ ...payment, card: e.target.value })} />
+                <Input placeholder="Name on card" value={payment.name} onChange={(e) => setPayment({ ...payment, name: e.target.value })} />
+                <div className="grid grid-cols-2 gap-3">
+                  <Input placeholder="MM/YY" value={payment.exp} onChange={(e) => setPayment({ ...payment, exp: e.target.value })} />
+                  <Input placeholder="CVC" value={payment.cvc} onChange={(e) => setPayment({ ...payment, cvc: e.target.value })} />
+                </div>
+                <Button className="mt-2" onClick={() => setStep(3)} disabled={!validPayment}>Review Order</Button>
+              </CardContent>
+            </Card>
+          )}
 
-				// Smooth scroll for navigation
-				document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-					anchor.addEventListener('click', function (e) {
-						e.preventDefault();
-						document.querySelector(this.getAttribute('href')).scrollIntoView({
-							behavior: 'smooth'
-						});
-					});
-				});
+          {step === 3 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Review & Place Order</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-sm text-muted-foreground">Shipping to {shipping.name}, {shipping.address}, {shipping.city} {shipping.postcode}</div>
+                <Separator />
+                {items.map((i) => (
+                  <div key={i.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <img src={i.img} alt="" className="h-12 w-12 rounded-lg object-cover" />
+                      <span>{i.name} × {i.qty}</span>
+                    </div>
+                    <span>£{(i.price * i.qty).toFixed(2)}</span>
+                  </div>
+                ))}
+                <Separator />
+                <div className="flex items-center justify-between text-sm"><span>Subtotal</span><span>£{subtotal.toFixed(2)}</span></div>
+                <div className="flex items-center justify-between text-sm"><span>Shipping</span><span>£{subtotal > 0 ? "5.00" : "0.00"}</span></div>
+                <div className="flex items-center justify-between text-lg font-bold"><span>Total</span><span>£{total.toFixed(2)}</span></div>
+                <Button className="w-full gap-2" onClick={() => { clear(); go("confirm"); }}>
+                  Place Order <Sparkles className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </div>
 
-				// Form validation and submission
-				const contactForm = document.getElementById('contactForm');
-				contactForm.addEventListener('submit', function(e) {
-					e.preventDefault();
-					// Add your form submission logic here
-					alert('Thank you for your message! I will get back to you soon.');
-					contactForm.reset();
-				});
+        <div>
+          <Card className="sticky top-24">
+            <CardHeader>
+              <CardTitle>Order Summary</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {items.length === 0 && <p className="text-sm text-muted-foreground">No items yet.</p>}
+              {items.length > 0 && (
+                <div className="space-y-2 text-sm">
+                  {items.map((i) => (
+                    <div key={i.id} className="flex items-center justify-between">
+                      <span className="truncate">{i.name} × {i.qty}</span>
+                      <span>£{(i.price * i.qty).toFixed(2)}</span>
+                    </div>
+                  ))}
+                  <Separator className="my-2" />
+                  <div className="flex items-center justify-between"><span>Subtotal</span><span>£{subtotal.toFixed(2)}</span></div>
+                  <div className="flex items-center justify-between text-muted-foreground"><span>Shipping</span><span>£{subtotal > 0 ? "5.00" : "0.00"}</span></div>
+                  <div className="flex items-center justify-between text-base font-bold"><span>Total</span><span>£{(subtotal + (subtotal > 0 ? 5 : 0)).toFixed(2)}</span></div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-				// Add animation classes when elements come into view
-				const observerOptions = {
-					threshold: 0.1
-				};
+function ConfirmPage({ go }) {
+  return (
+    <section className="mx-auto max-w-3xl px-4 py-20 text-center">
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20">
+          <Sparkles className="h-8 w-8" />
+        </div>
+        <h2 className="text-3xl font-extrabold">Order placed 🎉</h2>
+        <p className="mt-2 text-muted-foreground">This was a demo checkout. No payment was processed.</p>
+        <Button className="mt-6" onClick={() => go("home")}>Back to Home</Button>
+      </motion.div>
+    </section>
+  );
+}
 
-				const observer = new IntersectionObserver((entries) => {
-					entries.forEach(entry => {
-						if (entry.isIntersecting) {
-							entry.target.classList.add('animate');
-						}
-					});
-				}, observerOptions);
+// --------------------------------------------------
+// Footer & Sections
+// --------------------------------------------------
+function About() {
+  return (
+    <section id="about" className="bg-muted/40 py-16">
+      <div className="mx-auto max-w-4xl px-4 text-center">
+        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">About DemoShop</h2>
+        <p className="mt-4 text-muted-foreground">
+          Built with React, Tailwind, shadcn/ui, and framer-motion. Swap in your data and ship a gorgeous store fast.
+        </p>
+      </div>
+    </section>
+  );
+}
 
-				document.querySelectorAll('.project-item, .blog-item, .skill-category').forEach((el) => {
-					observer.observe(el);
-				});
-			</script>
-	</body>
-</html>
+function Footer() {
+  return (
+    <footer className="border-t py-10">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 md:flex-row">
+        <a href="#home" className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5" aria-hidden />
+          <span className="font-semibold">DemoShop</span>
+        </a>
+        <p className="text-center text-sm text-muted-foreground md:text-left">
+          © {new Date().getFullYear()} DemoShop — Demo template for educational use.
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+// --------------------------------------------------
+// App (single-file demo router)
+// --------------------------------------------------
+export default function EcommerceTemplate() {
+  const [route, setRoute] = useState("home");
+  const [miniCartOpen, setMiniCartOpen] = useState(false);
+  const go = (r) => setRoute(r);
+
+  return (
+    <CartProvider>
+      <div className="min-h-screen bg-background text-foreground">
+        <Nav onOpenCart={() => setMiniCartOpen(true)} go={go} />
+        <AnimatePresence mode="wait">
+          {route === "home" && (
+            <motion.main key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <Hero />
+              <Separator />
+              <Products />
+              <About />
+            </motion.main>
+          )}
+          {route === "cart" && (
+            <motion.main key="cart" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <CartPage go={go} />
+            </motion.main>
+          )}
+          {route === "checkout" && (
+            <motion.main key="checkout" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <CheckoutPage go={go} />
+            </motion.main>
+          )}
+          {route === "confirm" && (
+            <motion.main key="confirm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <ConfirmPage go={go} />
+            </motion.main>
+          )}
+        </AnimatePresence>
+        <MiniCart open={miniCartOpen} onClose={() => setMiniCartOpen(false)} go={go} />
+        <Footer />
+      </div>
+    </CartProvider>
+  );
+}
