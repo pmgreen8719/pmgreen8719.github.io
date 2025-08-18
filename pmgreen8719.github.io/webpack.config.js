@@ -6,7 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
-    publicPath: '/',
+    publicPath: '/pmgreen8719.github.io/', // <-- this is important!
     clean: true,
   },
   resolve: {
