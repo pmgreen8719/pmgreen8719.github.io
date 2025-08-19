@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StyleHub - Modern Fashion Store</title>
+    <title>StyleHub - Premium Fashion & Lifestyle</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -18,10 +18,18 @@
             <div class="nav-menu">
                 <a href="#home" class="nav-link">Home</a>
                 <a href="#shop" class="nav-link">Shop</a>
+                <a href="#collections" class="nav-link">Collections</a>
+                <a href="#trends" class="nav-link">Trends</a>
                 <a href="#about" class="nav-link">About</a>
                 <a href="#contact" class="nav-link">Contact</a>
             </div>
-            <div class="nav-cart">
+            <div class="nav-actions">
+                <button class="search-btn" onclick="toggleSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="user-btn" onclick="toggleUserMenu()">
+                    <i class="fas fa-user"></i>
+                </button>
                 <button class="cart-btn" onclick="toggleCart()">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCount">0</span>
@@ -30,21 +38,348 @@
         </div>
     </nav>
 
+    <!-- Search Bar -->
+    <div class="search-bar" id="searchBar">
+        <div class="search-container">
+            <input type="text" placeholder="Search for products, brands, or styles..." id="searchInput">
+            <button class="search-submit">
+                <i class="fas fa-search"></i>
+            </button>
+            <button class="close-search" onclick="toggleSearch()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- User Menu -->
+    <div class="user-menu" id="userMenu">
+        <div class="user-menu-content">
+            <div class="user-header">
+                <i class="fas fa-user-circle"></i>
+                <span>Welcome Guest</span>
+            </div>
+            <div class="user-actions">
+                <a href="#" onclick="showLoginModal()">Sign In</a>
+                <a href="#" onclick="showRegisterModal()">Create Account</a>
+                <a href="#" onclick="showWishlist()">Wishlist</a>
+                <a href="#" onclick="showOrderHistory()">Order History</a>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Discover Your Style</h1>
-            <p>Premium clothing for the modern individual</p>
-            <button class="cta-btn" onclick="scrollToShop()">Shop Now</button>
+            <h1>Discover Your Signature Style</h1>
+            <p>Premium fashion for the modern individual. Curated collections that speak to your unique personality.</p>
+            <div class="hero-buttons">
+                <button class="cta-btn primary" onclick="scrollToShop()">Shop Now</button>
+                <button class="cta-btn secondary" onclick="scrollToCollections()">View Collections</button>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number">50K+</span>
+                <span class="stat-label">Happy Customers</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Premium Products</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Customer Support</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="featured-categories">
+        <div class="container">
+            <h2 class="section-title">Shop by Category</h2>
+            <div class="categories-grid">
+                <div class="category-card" onclick="filterByCategory('tops')">
+                    <div class="category-icon">👕</div>
+                    <h3>Tops</h3>
+                    <p>Shirts, T-shirts, Blouses</p>
+                    <span class="category-count">150+ items</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('bottoms')">
+                    <div class="category-icon">👖</div>
+                    <h3>Bottoms</h3>
+                    <p>Jeans, Pants, Shorts</p>
+                    <span class="category-count">120+ items</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('outerwear')">
+                    <div class="category-icon">🧥</div>
+                    <h3>Outerwear</h3>
+                    <p>Jackets, Coats, Blazers</p>
+                    <span class="category-count">80+ items</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('dresses')">
+                    <div class="category-icon">👗</div>
+                    <h3>Dresses</h3>
+                    <p>Casual, Formal, Evening</p>
+                    <span class="category-count">90+ items</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('accessories')">
+                    <div class="category-icon">👜</div>
+                    <h3>Accessories</h3>
+                    <p>Bags, Jewelry, Scarves</p>
+                    <span class="category-count">200+ items</span>
+                </div>
+                <div class="category-card" onclick="filterByCategory('footwear')">
+                    <div class="category-icon">👟</div>
+                    <h3>Footwear</h3>
+                    <p>Sneakers, Boots, Heels</p>
+                    <span class="category-count">100+ items</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Shop Section -->
     <section id="shop" class="shop">
         <div class="container">
-            <h2 class="section-title">Featured Collection</h2>
+            <div class="shop-header">
+                <h2 class="section-title">Featured Collection</h2>
+                <div class="shop-filters">
+                    <select id="sortSelect" onchange="sortProducts()">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                        <option value="popular">Most Popular</option>
+                    </select>
+                    <button class="filter-btn" onclick="toggleFilters()">
+                        <i class="fas fa-filter"></i> Filters
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filter Sidebar -->
+            <div class="filter-sidebar" id="filterSidebar">
+                <div class="filter-header">
+                    <h3>Filters</h3>
+                    <button class="close-filters" onclick="toggleFilters()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="filter-section">
+                    <h4>Price Range</h4>
+                    <div class="price-range">
+                        <input type="range" id="priceRange" min="0" max="500" value="500">
+                        <div class="price-labels">
+                            <span>$0</span>
+                            <span id="priceValue">$500</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h4>Categories</h4>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="tops" checked> Tops
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="bottoms" checked> Bottoms
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="outerwear" checked> Outerwear
+                    </label>
+                    <label class="filter-checkbox">
+                        <input type="checkbox" value="dresses" checked> Dresses
+                    </label>
+                </div>
+                <div class="filter-section">
+                    <h4>Size</h4>
+                    <div class="size-options">
+                        <button class="size-btn" data-size="XS">XS</button>
+                        <button class="size-btn" data-size="S">S</button>
+                        <button class="size-btn" data-size="M">M</button>
+                        <button class="size-btn" data-size="L">L</button>
+                        <button class="size-btn" data-size="XL">XL</button>
+                        <button class="size-btn" data-size="XXL">XXL</button>
+                    </div>
+                </div>
+                <button class="apply-filters" onclick="applyFilters()">Apply Filters</button>
+            </div>
+
             <div class="products-grid" id="productsGrid">
                 <!-- Products will be populated by JavaScript -->
+            </div>
+            
+            <div class="load-more">
+                <button class="load-more-btn" onclick="loadMoreProducts()">
+                    Load More Products
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collections Section -->
+    <section id="collections" class="collections">
+        <div class="container">
+            <h2 class="section-title">Curated Collections</h2>
+            <div class="collections-grid">
+                <div class="collection-card" onclick="viewCollection('summer')">
+                    <div class="collection-image summer">
+                        <div class="collection-overlay">
+                            <h3>Summer Vibes</h3>
+                            <p>Light, breezy styles for warm days</p>
+                            <span class="collection-count">45 items</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="collection-card" onclick="viewCollection('workwear')">
+                    <div class="collection-image workwear">
+                        <div class="collection-overlay">
+                            <h3>Work Wear</h3>
+                            <p>Professional looks for the office</p>
+                            <span class="collection-count">38 items</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="collection-card" onclick="viewCollection('evening')">
+                    <div class="collection-image evening">
+                        <div class="collection-overlay">
+                            <h3>Evening Elegance</h3>
+                            <p>Sophisticated styles for special occasions</p>
+                            <span class="collection-count">32 items</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="collection-card" onclick="viewCollection('casual')">
+                    <div class="collection-image casual">
+                        <div class="collection-overlay">
+                            <h3>Casual Comfort</h3>
+                            <p>Relaxed, everyday essentials</p>
+                            <span class="collection-count">56 items</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trends Section -->
+    <section id="trends" class="trends">
+        <div class="container">
+            <h2 class="section-title">Trending Now</h2>
+            <div class="trends-content">
+                <div class="trends-text">
+                    <h3>Spring 2024 Trends</h3>
+                    <p>Discover the latest fashion movements that are shaping this season's style landscape.</p>
+                    <ul class="trend-list">
+                        <li>🎨 Bold Color Blocking</li>
+                        <li>🌿 Sustainable Materials</li>
+                        <li>✨ Metallic Accents</li>
+                        <li>🔄 Upcycled Fashion</li>
+                        <li>🎭 Statement Sleeves</li>
+                    </ul>
+                    <button class="trend-btn" onclick="viewTrends()">Explore Trends</button>
+                </div>
+                <div class="trends-visual">
+                    <div class="trend-item">
+                        <div class="trend-icon">🎨</div>
+                        <span>Color Blocking</span>
+                    </div>
+                    <div class="trend-item">
+                        <div class="trend-icon">🌿</div>
+                        <span>Eco-Friendly</span>
+                    </div>
+                    <div class="trend-item">
+                        <div class="trend-icon">✨</div>
+                        <span>Metallics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Customers Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"StyleHub has transformed my wardrobe! The quality and style are unmatched. I get compliments every time I wear their pieces."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👩‍💼</div>
+                        <div class="author-info">
+                            <h4>Sarah Johnson</h4>
+                            <span>Marketing Director</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"The customer service is incredible and the shipping is always fast. I've been shopping here for years and never been disappointed."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👨‍💻</div>
+                        <div class="author-info">
+                            <h4>Michael Chen</h4>
+                            <span>Software Engineer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"Perfect fit every time! The size guide is accurate and the return process is seamless. Highly recommend!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">👩‍🎨</div>
+                        <div class="author-info">
+                            <h4>Emma Rodriguez</h4>
+                            <span>Graphic Designer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Stay in the Loop</h2>
+                <p>Get exclusive access to new collections, special offers, and style tips delivered to your inbox.</p>
+                <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                    <input type="email" placeholder="Enter your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <div class="newsletter-benefits">
+                    <div class="benefit">
+                        <i class="fas fa-gift"></i>
+                        <span>Exclusive Offers</span>
+                    </div>
+                    <div class="benefit">
+                        <i class="fas fa-shipping-fast"></i>
+                        <span>Early Access</span>
+                    </div>
+                    <div class="benefit">
+                        <i class="fas fa-star"></i>
+                        <span>VIP Treatment</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -52,8 +387,35 @@
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
-            <h2 class="section-title">About StyleHub</h2>
-            <p>We're passionate about bringing you the latest trends in fashion. Our curated collection features premium materials, contemporary designs, and timeless style that speaks to the modern individual.</p>
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">About StyleHub</h2>
+                    <p>Founded in 2020, StyleHub has been at the forefront of fashion innovation, bringing you curated collections that blend contemporary design with timeless elegance.</p>
+                    <p>Our mission is to empower individuals to express their unique style through premium quality clothing that's both beautiful and sustainable.</p>
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <span class="stat-number">4+</span>
+                            <span class="stat-label">Years of Excellence</span>
+                        </div>
+                        <div class="about-stat">
+                            <span class="stat-number">25+</span>
+                            <span class="stat-label">Designer Partners</span>
+                        </div>
+                        <div class="about-stat">
+                            <span class="stat-number">98%</span>
+                            <span class="stat-label">Customer Satisfaction</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="about-visual">
+                        <div class="visual-item">👗</div>
+                        <div class="visual-item">👔</div>
+                        <div class="visual-item">🧥</div>
+                        <div class="visual-item">👖</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -61,16 +423,58 @@
     <section id="contact" class="contact">
         <div class="container">
             <h2 class="section-title">Get in Touch</h2>
-            <p>Have questions? We'd love to hear from you.</p>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>hello@stylehub.com</span>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Us</h4>
+                            <span>hello@stylehub.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Call Us</h4>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Visit Us</h4>
+                            <span>123 Fashion Ave, Style City, SC 12345</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Business Hours</h4>
+                            <span>Mon-Fri: 9AM-6PM, Sat: 10AM-4PM</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <span>+1 (555) 123-4567</span>
-                </div>
+                <form class="contact-form" onsubmit="submitContact(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactName">Name</label>
+                            <input type="text" id="contactName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email</label>
+                            <input type="email" id="contactEmail" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactSubject">Subject</label>
+                        <input type="text" id="contactSubject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage">Message</label>
+                        <textarea id="contactMessage" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="contact-submit">Send Message</button>
+                </form>
             </div>
         </div>
     </section>
@@ -200,6 +604,68 @@
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sign In</h3>
+                <button class="close-modal" onclick="closeLoginModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="login-submit">Sign In</button>
+            </form>
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="#" onclick="showRegisterModal()">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Account</h3>
+                <button class="close-modal" onclick="closeRegisterModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="register-form" onsubmit="handleRegister(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="registerFirstName">First Name</label>
+                        <input type="text" id="registerFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerLastName">Last Name</label>
+                        <input type="text" id="registerLastName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="register-submit">Create Account</button>
+            </form>
+            <div class="modal-footer">
+                <p>Already have an account? <a href="#" onclick="showLoginModal()">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Overlay -->
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
@@ -209,26 +675,41 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>StyleHub</h4>
-                    <p>Premium fashion for the modern individual</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <a href="#home">Home</a>
-                    <a href="#shop">Shop</a>
-                    <a href="#about">About</a>
-                    <a href="#contact">Contact</a>
-                </div>
-                <div class="footer-section">
-                    <h4>Follow Us</h4>
+                    <p>Premium fashion for the modern individual. Discover your signature style with our curated collections.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
                     </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <a href="#shop">All Products</a>
+                    <a href="#collections">Collections</a>
+                    <a href="#trends">Trends</a>
+                    <a href="#">New Arrivals</a>
+                    <a href="#">Sale Items</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <a href="#contact">Contact Us</a>
+                    <a href="#">Help Center</a>
+                    <a href="#">Size Guide</a>
+                    <a href="#">Shipping Info</a>
+                    <a href="#">Returns</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <a href="#about">About Us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Press</a>
+                    <a href="#">Sustainability</a>
+                    <a href="#">Privacy Policy</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 StyleHub. All rights reserved.</p>
+                <p>&copy; 2024 StyleHub. All rights reserved. | Made with ❤️ for fashion lovers</p>
             </div>
         </div>
     </footer>
